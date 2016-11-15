@@ -1,0 +1,29 @@
+[rmqInput]
+type = "RmqInput"
+name="rmqtest"
+rmq_address="localhost:6379"
+queue="things"
+password=""
+dbid=2
+decoder="rmqdecoder"
+
+[rmqdecoder]
+type = "PayloadRegexDecoder"
+match_regex = '^\S+\s(?P<Number>\d+)'
+timestamp_layout = "02/Jan/2006:15:04:05 -0700"
+
+
+[PayloadEncoder]
+append_newlines = false
+prefix_ts = false
+ts_format = "%Y/%m/%d %l:%M:%S%p %Z"
+
+[counter_output]
+type = "RmqOutput"
+message_matcher = "Type == 'rmq.input'"
+name="rmqtest"
+rmq_address="localhost:6379"
+queue="things"
+password=""
+dbid=3
+encoder = "PayloadEncoder"
